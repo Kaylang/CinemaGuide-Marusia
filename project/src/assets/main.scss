@@ -1,0 +1,41 @@
+@import './base.scss';
+
+#app {
+  font-weight: normal;
+}
+
+@media (hover: hover) {
+  button.header__login:hover,
+  a.menu__link:hover {
+    color: var(--content-active);
+  }
+}
+
+@media (min-width: 1024px) {
+  #app {
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1440px;
+    min-width: 375px;
+    display: grid;
+    grid-template-areas:
+      'header'
+      'main'
+      'footer';
+    grid-template-rows: auto 1fr auto;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+
+  a {
+    text-decoration: none;
+    color: var(--content-primary);
+    /* padding: 3px; */
+  }
+
+  a.menu__link,
+  button.header__login {
+    transition: 0.4s color ease-in-out;
+  }
+}

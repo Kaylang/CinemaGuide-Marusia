@@ -1,0 +1,103 @@
+@font-face {
+  font-family: 'Play';
+  src:
+    url('@/assets/fonts/PlayRegular.woff2') format('woff2'),
+    url('@/assets/fonts/PlayRegular.woff') format('woff');
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Play';
+  src:
+    url('@/assets/fonts/PlayBold.woff2') format('woff2'),
+    url('@/assets/fonts/PlayBold.woff') format('woff');
+  font-display: swap;
+  font-weight: bold;
+  font-style: normal;
+}
+
+:root {
+  --white: #fff;
+  --black: #000;
+  --background-primary: linear-gradient(
+      0deg,
+      rgba(39, 36, 36, 0.7),
+      rgba(0, 0, 0, 0.77)
+    ),
+    linear-gradient(0deg, rgba(163, 147, 245, 1), rgba(39, 135, 245, 1));
+  --background-secondary: #393b3c;
+  --content-primary: rgba(255, 255, 255, 1);
+  --content-secondary: rgba(255, 255, 255, 0.7);
+  --content-disabled: rgba(255, 255, 255, 0.5);
+  --content-active: rgba(180, 169, 255, 1);
+  --btn-primary: rgba(103, 165, 235, 1);
+  --btn-primary-hover: rgba(69, 82, 110, 1);
+  --btn-primary-active: var(--white);
+  --btn-primary-color: var(--content-primary);
+  --btn-primary-hover-color: var(--content-disabled);
+  --btn-primary-active-color: var(--black);
+  --btn-secondary: rgba(57, 59, 60, 1);
+  --btn-secondary-stroke: rgba(0, 0, 0, 0.4);
+  --btn-secondary-hover: rgba(116, 116, 116, 1);
+  --btn-secondary-active: var(--white);
+  --btn-secondary-color: var(--content-primary);
+  --btn-secondary-hover-color: var(--content-disabled);
+  --btn-secondary-active-color: var(--black);
+
+  --black40: rgba(0, 0, 0, 0.4);
+  --black50: rgba(0, 0, 0, 0.5);
+  --gold: #a59400;
+  --green: #308e21;
+  --gray: #777;
+  --pink: #dc5dfc;
+  --red: #c82020;
+  --white25: rgba(255, 255, 255, 0.25);
+  --white33: rgba(255, 255, 255, 0.33);
+  --white50: rgba(255, 255, 255, 0.5);
+  --white70: rgba(255, 255, 255, 0.7);
+
+  /* --section-gap: 160px; */
+}
+
+html {
+  scrollbar-gutter: stable;
+  font-family: 'Play';
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  box-sizing: inherit;
+}
+
+.flex {
+  display: flex;
+}
+
+body {
+  color: var(--white);
+  font-size: 18px;
+  font-weight: normal;
+  line-height: 24px;
+  background: var(--background-primary);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.red {
+  background-color: var(--red);
+}
+.gray {
+  background-color: var(--gray);
+}
+.green {
+  background-color: var(--green);
+}
+.gold {
+  background-color: var(--gold);
+}
