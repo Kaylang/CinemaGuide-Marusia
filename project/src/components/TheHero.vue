@@ -4,7 +4,6 @@ import type { TMovie } from '@/types/movie';
 import { ref, watch } from 'vue';
 import IconStar from './icons/IconStar.vue';
 import { convertToHours } from '@/utils/convertTime';
-// import { getGenresFromArray } from '@/utils/getGenresFormArray';
 import { EGenres } from '@/enums/genres';
 import IconFavorite from './icons/iconFavorite.vue';
 import IconRenew from './icons/IconRenew.vue';
@@ -30,8 +29,6 @@ watch(
   },
   { immediate: true, deep: true },
 );
-
-// getRandomMovie();
 
 // watch(
 //   props.movie,
@@ -74,31 +71,37 @@ watch(
             '',
           )
         }}</span>
-        <!-- <span class="hero__description-genre">{{ randomMovie.genres }}</span> -->
         <span v-if="randomMovie.runtime" class="hero__description-duration">{{
           convertToHours(randomMovie.runtime)
         }}</span>
       </div>
       <div class="hero__description-middle flex">
-        <h2 class="hero__description-title">{{ randomMovie.title }}</h2>
-        <p class="hero__description-plot">{{ randomMovie.plot }}</p>
+        <h2 class="hero__description-title section-title">
+          {{ randomMovie.title }}
+        </h2>
+        <p class="hero__description-plot">
+          {{ randomMovie.plot }}
+        </p>
       </div>
       <div class="hero__description-bottom bottom flex">
-        <button class="hero__description-bottom-trailer" type="button">
+        <button class="hero__description-trailer btn-primary" type="button">
           Трейлер
         </button>
         <router-link
           v-if="!isCard"
-          class="hero__description-bottom-about"
+          class="hero__description-about btn-secondary"
           :to="{ name: 'movie', params: { id: randomMovie.id } }"
         >
           О фильме
         </router-link>
-        <button class="hero__description-bottom-icon flex" type="button">
+        <button
+          class="hero__description-icon btn-secondary btn-svg flex"
+          type="button"
+        >
           <IconFavorite />
         </button>
         <button
-          class="hero__description-bottom-icon flex"
+          class="hero__description-icon btn-secondary btn-svg flex"
           v-if="!isCard"
           type="button"
           @click="getRandomMovie()"
@@ -120,7 +123,7 @@ watch(
 
 <style lang="scss" scoped>
 .hero {
-  padding: 32px 80px 0;
+  padding-top: 32px;
   min-height: 586px;
   justify-content: space-between;
   align-items: center;
@@ -147,12 +150,6 @@ watch(
       color: var(--content-primary);
     }
 
-    &-title {
-      font-size: 48px;
-      font-weight: 700;
-      line-height: 56px;
-    }
-
     &-plot {
       font-size: 24px;
       line-height: 32px;
@@ -169,33 +166,20 @@ watch(
       row-gap: 16px;
     }
 
+    &-trailer,
+    &-about {
+      padding: 16px 48px;
+    }
+
+    &-icon {
+      padding: 16px 22px;
+      align-items: center;
+      justify-content: center;
+    }
+
     &-bottom {
       align-items: center;
       column-gap: 16px;
-
-      button,
-      &-about,
-      &-trailer {
-        border: 1px solid var(--btn-secondary);
-        border-radius: 28px;
-        background-color: var(--btn-secondary);
-        font-size: 18px;
-        font-weight: 700;
-        line-height: 24px;
-        color: var(--white);
-        cursor: pointer;
-      }
-
-      &-trailer,
-      &-about {
-        padding: 16px 48px;
-      }
-
-      &-icon {
-        padding: 16px 22px;
-        align-items: center;
-        justify-content: center;
-      }
     }
   }
 
@@ -212,54 +196,5 @@ watch(
       object-fit: cover;
     }
   }
-}
-
-button.hero__description-bottom-trailer {
-  background-color: var(--btn-primary);
-}
-
-button.hero__description-bottom-trailer:focus,
-button.hero__description-bottom-trailer:focus-visible,
-button.hero__description-bottom-trailer:active {
-  border-color: var(--btn-primary-active);
-  outline-color: var(--btn-primary-active);
-  color: var(--btn-primary-active-color);
-  background-color: var(--btn-primary-active);
-}
-
-a.hero__description-bottom-about:focus,
-a.hero__description-bottom-about:focus-visible,
-a.hero__description-bottom-about:active {
-  border-color: var(--btn-secondary-active);
-  outline-color: var(--btn-secondary-active);
-  color: var(--btn-secondary-active-color);
-  background-color: var(--btn-secondary-active);
-}
-
-// button.hero__description-bottom-icon:focus,
-// button.hero__description-bottom-icon:focus-visible,
-// button.hero__description-bottom-icon:active
-// button.hero__description-bottom-icon:focus svg > path,
-// button.hero__description-bottom-icon:focus-visible svg > path,
-// button.hero__description-bottom-icon:active svg > path {
-//   fill: var(--btn-secondary-active-color);
-// }
-
-@media (hover: hover) {
-  button.hero__description-bottom-trailer:hover {
-    color: var(--btn-primary-hover-color);
-    background-color: var(--btn-primary-hover);
-  }
-
-  a.hero__description-bottom-about:hover,
-  button.hero__description-bottom-icon:hover {
-    border-color: var(--btn-secondary--stroke);
-    color: var(--btn-secondary-hover-color);
-    background-color: var(--btn-secondary-hover);
-  }
-
-  // button.hero__description-bottom-icon:hover > svg > path {
-  //   fill: var(--btn-secondary-hover-color);
-  // }
 }
 </style>

@@ -19,6 +19,27 @@ export type TGenre = 'action'
   | 'war'
   | 'western';
 
+export type TGenreRu = 'боевик'
+  | 'приключения'
+  | 'мультфильм'
+  | 'комедия'
+  | 'криминал'
+  | 'документальный'
+  | 'драма'
+  | 'семейный'
+  | 'фэнтези'
+  | 'исторический'
+  | 'ужасы'
+  | 'музыкальный'
+  | 'мистика'
+  | 'романтика'
+  | 'фантастика'
+  | 'стенд-ап'
+  | 'триллер'
+  | 'телефильм'
+  | 'военный'
+  | 'вестерн';
+
 export type TFavorites = string[];
 
 export type TAttribute = number | 'random';
@@ -50,13 +71,26 @@ export type TMovie = {
   searchL?: string,
   homepage?: string,
   status?: string,
-  count?: number,
 };
+
+export type TCard = {
+  id: number,
+  title: string,
+  posterUrl?: string,
+  count?: number,
+}
 
 export type TParams = {
   count?: number,
   page?: number,
   title?: string,
   genre?: TGenre,
+}
+
+export type TGenreCard = {
+  genre: TGenre,
+  genreRU: TGenreRu,
+  posterUrl: string,
+  id: number
 }
 

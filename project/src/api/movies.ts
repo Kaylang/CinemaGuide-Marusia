@@ -10,16 +10,15 @@ export const getMovies = async (params?: TParams | undefined): Promise<TMovie[] 
       queryString = '?'
       const paramsArray = Object.entries(params)
       for (const [key, value] of paramsArray) {
-        queryString = queryString === '?' ? `${key}=${value}` : `&${key}=${value}`;
-
+        queryString = queryString.endsWith('?') ? queryString + `${key}=${value}` : queryString + `&${key}=${value}`;
       }
+      // console.log(`${MOVIES_API}/${queryString}`);
     }
-    const response = await fetch(`${MOVIES_API}${queryString}`, {
+    const response = await fetch(`${MOVIES_API}/${queryString}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(params),
     });
 
     if (response.status === 200) return await response.json();

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TheList from '@/components/TheList.vue';
+import TheMoviesList from '@/components/TheMoviesList.vue';
 import TheHero from '../components/TheHero.vue';
 import { getOneMovie } from '@/api/movies';
 import type { TMovie } from '@/types/movie';
@@ -17,9 +17,6 @@ getRandomMovie();
 <template>
   <main class="main">
     <TheHero v-if="movie" :movie="movie" :isCard="false" />
-    <TheList />
+    <TheMoviesList />
   </main>
 </template>
-
-<!-- <style lang="scss" scoped>
-</style> -->

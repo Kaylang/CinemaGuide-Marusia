@@ -1,7 +1,39 @@
-@import './base.scss';
+@use './base.scss';
 
 #app {
+  margin: 0 auto;
+  width: 100%;
+  min-width: 375px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-areas:
+    'header'
+    'main'
+    'footer';
+  grid-template-rows: auto 1fr auto;
   font-weight: normal;
+  overflow: hidden;
+}
+
+a {
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  display: block;
+  text-decoration: none;
+  color: var(--content-primary);
+}
+
+a,
+button {
+  transition-duration: 0.4s;
+  transition-property: color, background-color, border-color, outline-color;
+  transition-timing-function: ease-in-out;
+}
+
+.main {
+  margin: 0 auto;
+  width: 100%;
 }
 
 @media (hover: hover) {
@@ -13,29 +45,18 @@
 
 @media (min-width: 1024px) {
   #app {
-    position: relative;
-    margin: 0 auto;
-    width: 100%;
+    padding: 0 80px;
     max-width: 1440px;
-    min-width: 375px;
-    display: grid;
-    grid-template-areas:
-      'header'
-      'main'
-      'footer';
-    grid-template-rows: auto 1fr auto;
-    min-height: 100vh;
-    overflow: hidden;
   }
 
-  a {
-    text-decoration: none;
-    color: var(--content-primary);
-    /* padding: 3px; */
+  .main {
+    margin-bottom: 160px;
   }
 
-  a.menu__link,
-  button.header__login {
-    transition: 0.4s color ease-in-out;
+  .section-title {
+    margin-bottom: 64px;
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
   }
 }

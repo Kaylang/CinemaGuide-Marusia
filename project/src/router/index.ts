@@ -1,8 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import GenresView from '../views/GenresView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
-import MovieCardView from '@/views/MovieCardView.vue'
+import { createRouter, createWebHistory } from 'vue-router';
+import HomeView from '@/views/HomeView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,19 +12,23 @@ const router = createRouter({
     {
       path: '/genres',
       name: 'genres',
-      component: GenresView,
-      // component: () => import('../views/GenresView.vue'),
+      component: () => import('../views/GenresView.vue'),
     },
+    {
+      path: '/genre/:genre',
+      name: 'filmsOfGenre',
+      component: () => import('../views/GenreFilmsView.vue'),
+    },
+
     {
       path: '/movies/:id',
       name: 'movie',
-      component: MovieCardView,
-      // component: () => import('../views/GenresView.vue'),
+      component: () => import('../views/MovieCardView.vue'),
     },
     {
       path: '/:pathMatch(.*)*',
       name: 'not-found',
-      component: NotFoundView,
+      component: () => import('../views/NotFoundView.vue'),
     },
   ],
 })

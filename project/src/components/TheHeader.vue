@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router';
 import IconSearch from './icons/IconSearch.vue';
-import IconLogoWhite from './icons/IconLogoWhite.vue';
 const isAutorized = false;
 const userName = 'User';
 </script>
@@ -10,7 +9,11 @@ const userName = 'User';
   <header class="header">
     <div class="header__wrapper flex">
       <router-link class="header__link" to="home">
-        <IconLogoWhite />
+        <img
+          class="header__logo"
+          :src="`/images/logo-white.png`"
+          alt="Логотип Маруся с буквами белого цвета"
+        />
       </router-link>
 
       <nav class="header__menu flex">
@@ -31,16 +34,15 @@ const userName = 'User';
 
 <style lang="scss" scoped>
 .header {
-  padding: 32px 80px;
+  padding: 32px 0;
+  margin-bottom: 64px;
   width: 100%;
-  // background-color: var(--black50);
 
   &__wrapper {
-    max-width: 1280px;
-    width: 100%;
     margin: 0 auto;
-    align-items: center;
+    width: 100%;
     justify-content: space-between;
+    align-items: center;
   }
 
   &__link {
@@ -51,7 +53,7 @@ const userName = 'User';
   }
 
   &__logo {
-    width: 240px;
+    width: 143px;
     height: 32px;
     display: block;
   }

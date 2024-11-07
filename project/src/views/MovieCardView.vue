@@ -22,8 +22,8 @@ loadMovie();
   <main class="main">
     <TheHero v-if="movie" :movie="movie" :isCard="true" />
     <section class="descr">
-      <h2 class="descr__title">О фильме</h2>
-      <ul class="descr__list flex">
+      <h2 class="descr__title section-title">О фильме</h2>
+      <ul class="descr__list list-reset flex">
         <li class="descr__item flex">
           <div class="descr__left flex">
             <div class="descr__parameter">Язык оригинала</div>
@@ -97,25 +97,12 @@ loadMovie();
 
 <style lang="scss" scoped>
 .main {
-  margin: 0 auto;
-  max-width: 1280px;
-  width: 100%;
-
   .descr {
-    padding: 40px 80px 120px;
-    &__title {
-      margin-bottom: 64px;
-      font-size: 40px;
-      font-weight: 700;
-      line-height: 48px;
-    }
+    padding-top: 40px;
 
     &__list {
-      padding: 0;
-      padding-left: 0;
       flex-direction: column;
       row-gap: 24px;
-      list-style: none;
     }
 
     &__item {
