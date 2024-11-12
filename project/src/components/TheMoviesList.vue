@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { TCard, TMovie } from '@/types/movie';
 import { getTopTenMovies } from '@/api/movies';
 import PosterCard from './PosterCard.vue';
@@ -11,6 +11,8 @@ const getTopTen = async () => {
   const movies = await getTopTenMovies();
   if (movies) {
     movieCards.value = movies?.map((item: TMovie) => {
+      console.log(item.posterUrl);
+      console.log(item.id);
       return {
         id: item.id,
         title: item.title,
@@ -21,7 +23,9 @@ const getTopTen = async () => {
   }
 };
 
-getTopTen();
+onMounted(() => {
+  getTopTen();
+});
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 import { getMovies } from '@/api/movies';
 import { EGenres } from '@/enums/genres';
 import type { TCard, TGenre, TMovie } from '@/types/movie';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import PosterCard from '@/components/PosterCard.vue';
 
@@ -53,7 +53,9 @@ const getMoreMovies = async () => {
   }
 };
 
-getMoviesList();
+onMounted(() => {
+  getMoviesList();
+});
 </script>
 
 <template>

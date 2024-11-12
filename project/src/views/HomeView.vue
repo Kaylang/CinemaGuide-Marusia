@@ -3,15 +3,16 @@ import TheMoviesList from '@/components/TheMoviesList.vue';
 import TheHero from '../components/TheHero.vue';
 import { getOneMovie } from '@/api/movies';
 import type { TMovie } from '@/types/movie';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const movie = ref<TMovie | null>(null);
 
 const getRandomMovie = async () => {
   movie.value = await getOneMovie('random');
 };
-
-getRandomMovie();
+onMounted(() => {
+  getRandomMovie();
+});
 </script>
 
 <template>

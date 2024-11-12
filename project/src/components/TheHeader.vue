@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router';
 import IconSearch from './icons/IconSearch.vue';
-const isAutorized = false;
-const userName = 'User';
+import { useUserStore } from '@/stores/user';
+import { updateModalStatus } from '@/utils/updateModalState';
+
+const userStore = useUserStore();
 </script>
 
 <template>
@@ -26,8 +28,14 @@ const userName = 'User';
         </button>
         <input class="search__input" type="text" placeholder="Поиск" />
       </div>
-      <button class="header__login" v-if="!isAutorized">Войти</button>
-      <button class="header__login" v-else>{{ userName }}</button>
+      <button
+        class="header__login"
+        v-if="!userStore.isAuthorized"
+        @click="updateModalStatus(true)"
+      >
+        Войти
+      </button>
+      <button class="header__login" v-else>{{ userStore.userName }}</button>
     </div>
   </header>
 </template>

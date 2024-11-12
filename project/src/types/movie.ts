@@ -93,4 +93,3 @@ export type TGenreCard = {
   posterUrl: string,
   id: number
 }
-

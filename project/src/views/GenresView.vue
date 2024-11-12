@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import type { TGenre, TGenreCard, TGenreRu } from '@/types/movie';
 import { EGenres } from '@/enums/genres';
 import { getGenres } from '@/api/movies';
@@ -24,7 +24,9 @@ const getGenresList = async () => {
     });
 };
 
-getGenresList();
+onMounted(() => {
+  getGenresList();
+});
 </script>
 
 <template>

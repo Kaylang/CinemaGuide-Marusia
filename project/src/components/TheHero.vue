@@ -7,12 +7,22 @@ import { convertToHours } from '@/utils/convertTime';
 import { EGenres } from '@/enums/genres';
 import IconFavorite from './icons/iconFavorite.vue';
 import IconRenew from './icons/IconRenew.vue';
+import { updateModalStatus } from '@/utils/updateModalState';
+import { useUserStore } from '@/stores/user';
 
 const props = defineProps<{
   movie: TMovie;
   isCard: boolean;
 }>();
 
+const userStore = useUserStore();
+
+const handleFavoriteButton = () => {
+  if (!userStore.isAuthorized) {
+    updateModalStatus(true);
+  } else {
+  }
+};
 // const genres = ref<string>('');
 const randomMovie = ref<TMovie | null>(null);
 
@@ -97,6 +107,7 @@ watch(
         <button
           class="hero__description-icon btn-secondary btn-svg flex"
           type="button"
+          @click="handleFavoriteButton"
         >
           <IconFavorite />
         </button>

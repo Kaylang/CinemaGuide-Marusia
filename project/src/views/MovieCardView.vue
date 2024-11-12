@@ -2,7 +2,7 @@
 import { getOneMovie } from '@/api/movies';
 import TheHero from '@/components/TheHero.vue';
 import type { TMovie } from '@/types/movie';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -15,7 +15,9 @@ const loadMovie = async () => {
   movie.value = responce;
 };
 
-loadMovie();
+onMounted(() => {
+  loadMovie();
+});
 </script>
 
 <template>
@@ -29,8 +31,14 @@ loadMovie();
             <div class="descr__parameter">Язык оригинала</div>
             <div class="descr__wrap"></div>
           </div>
-          <div class="descr__value">
-            {{ movie?.language ? movie.language : 'Не указан' }}
+          <div class="descr__value descr__value-lang">
+            {{
+              movie?.language
+                ? new Intl.DisplayNames(['ru'], { type: 'language' }).of(
+                    movie.language,
+                  )
+                : 'Нет информации'
+            }}
           </div>
         </li>
         <li class="descr__item flex">
@@ -44,7 +52,7 @@ loadMovie();
                 ? new Intl.NumberFormat('ru-RU').format(
                     parseInt(movie.budget),
                   ) + ' руб.'
-                : 'Не указан'
+                : 'Нет информации'
             }}
           </div>
         </li>
@@ -59,7 +67,7 @@ loadMovie();
                 ? new Intl.NumberFormat('ru-RU').format(
                     parseInt(movie.revenue),
                   ) + ' руб.'
-                : 'Не указана'
+                : 'Нет информации'
             }}
           </div>
         </li>
@@ -69,7 +77,7 @@ loadMovie();
             <div class="descr__wrap"></div>
           </div>
           <div class="descr__value">
-            {{ movie?.director ? movie.director : 'Не указан' }}
+            {{ movie?.director ? movie.director : 'Нет информации' }}
           </div>
         </li>
         <li class="descr__item flex">
@@ -78,7 +86,7 @@ loadMovie();
             <div class="descr__wrap"></div>
           </div>
           <div class="descr__value">
-            {{ movie?.production ? movie.production : 'Не указано' }}
+            {{ movie?.production ? movie.production : 'Нет информации' }}
           </div>
         </li>
         <li class="descr__item flex">
@@ -87,7 +95,7 @@ loadMovie();
             <div class="descr__wrap"></div>
           </div>
           <div class="descr__value">
-            {{ movie?.awardsSummary ? movie.awardsSummary : 'Не указаны' }}
+            {{ movie?.awardsSummary ? movie.awardsSummary : 'Нет информации' }}
           </div>
         </li>
       </ul>
@@ -112,16 +120,24 @@ loadMovie();
 
     &__left {
       width: 40%;
+      min-width: 40%;
     }
 
-    &__parameter,
-    &__value {
+    &__parameter {
+      display: flex;
+      align-items: flex-end;
       flex-shrink: 0;
     }
 
     &__wrap {
       width: 100%;
       border-bottom: 1px dotted var(--white);
+    }
+
+    &__value {
+      &-lang {
+        text-transform: capitalize;
+      }
     }
   }
 }

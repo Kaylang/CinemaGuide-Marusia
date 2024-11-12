@@ -32,6 +32,7 @@
   --content-secondary: rgba(255, 255, 255, 0.7);
   --content-disabled: rgba(255, 255, 255, 0.5);
   --content-active: rgba(180, 169, 255, 1);
+  --content-error: #ff7575;
   --brand-active: rgba(106, 93, 194, 1);
   --btn-primary: rgba(103, 165, 235, 1);
   --btn-primary-hover: rgba(69, 82, 110, 1);
@@ -110,15 +111,27 @@ body {
 }
 
 .btn-primary,
-.btn-secondary {
+.btn-secondary,
+.btn-white {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
   font-size: 18px;
   font-weight: 700;
   line-height: 24px;
-  color: var(--white);
   border-radius: 28px;
   border: 1px solid transparent;
-  background-color: var(--btn-secondary);
   cursor: pointer;
+}
+
+.btn-primary,
+.btn-secondary {
+  color: var(--white);
+}
+
+.btn-white {
+  color: var(--black);
+  background-color: var(--white);
 }
 
 .btn-primary {

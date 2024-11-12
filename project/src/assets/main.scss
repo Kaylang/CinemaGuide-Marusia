@@ -45,6 +45,7 @@ button {
 
 @media (min-width: 1024px) {
   #app {
+    position: relative;
     padding: 0 80px;
     max-width: 1440px;
   }

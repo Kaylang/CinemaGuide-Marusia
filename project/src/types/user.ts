@@ -5,5 +5,5 @@ export type TUser = {
   email: string;
   surname?: string;
   password?: string;
-  favorites: TFavorites;
+  favorites?: TFavorites;
 }
