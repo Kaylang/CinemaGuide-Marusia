@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router';
-import IconSearch from './icons/IconSearch.vue';
 import { useUserStore } from '@/stores/user';
-import { updateModalStatus } from '@/utils/updateModalState';
+import { updateModalState } from '@/utils/updateModalState';
+import { isDesktop } from '@/singltons/isDesktop';
+import TheButton from './TheButton.vue';
+import IconGenres from './icons/IconGenres.vue';
+import TheSearch from './TheSearch.vue';
+import IconUser from './icons/IconUser.vue';
 
 const userStore = useUserStore();
 </script>
@@ -10,149 +14,147 @@ const userStore = useUserStore();
 <template>
   <header class="header">
     <div class="header__wrapper flex">
-      <router-link class="header__link" to="home">
-        <img
-          class="header__logo"
-          :src="`/images/logo-white.png`"
-          alt="Логотип Маруся с буквами белого цвета"
-        />
+      <router-link class="header__link flex" to="/">
+        <picture class="header__logo">
+          <source
+            media="(max-width: 1024px)"
+            srcset="/images/logo-white-mobile.png"
+          />
+          <img
+            :src="'/images/logo-white.png'"
+            alt="Логотип Маруся с буквами белого цвета"
+          />
+        </picture>
       </router-link>
+      <div class="header__wrapper-right flex">
+        <nav class="header__menu flex">
+          <RouterLink class="menu__link flex" v-if="isDesktop" to="/">
+            Главная
+          </RouterLink>
+          <RouterLink class="menu__link flex" v-if="isDesktop" to="/genres">
+            Жанры
+          </RouterLink>
+          <RouterLink class="menu__link flex" v-else to="/genres"
+            ><IconGenres />
+          </RouterLink>
+        </nav>
+        <TheSearch class="header__search" />
 
-      <nav class="header__menu flex">
-        <RouterLink class="menu__link" to="/">Главная</RouterLink>
-        <RouterLink class="menu__link" to="/genres">Жанры</RouterLink>
-      </nav>
-      <div class="header__search search flex">
-        <button class="search__button">
-          <IconSearch />
-        </button>
-        <input class="search__input" type="text" placeholder="Поиск" />
+        <TheButton
+          :btn-classes="'header__login'"
+          @click="updateModalState(true)"
+          v-if="!userStore.isAuthorized"
+        >
+          <template v-if="isDesktop">Войти</template>
+          <IconUser v-else />
+        </TheButton>
+        <RouterLink class="header__login" v-else to="/user">
+          <template v-if="isDesktop">{{ userStore.getName() }}</template>
+          <IconUser v-else />
+        </RouterLink>
       </div>
-      <button
-        class="header__login"
-        v-if="!userStore.isAuthorized"
-        @click="updateModalStatus(true)"
-      >
-        Войти
-      </button>
-      <button class="header__login" v-else>{{ userStore.userName }}</button>
     </div>
   </header>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .header {
-  padding: 32px 0;
-  margin-bottom: 64px;
+  padding: 16px 20px;
   width: 100%;
 
-  &__wrapper {
-    margin: 0 auto;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
+  &__logo img {
+    width: 82px;
+    height: 32px;
+    display: block;
   }
 
   &__link {
     margin: 0;
-    margin-right: 80px;
-    display: block;
+    margin-right: auto;
+    align-items: center;
     flex-shrink: 0;
   }
 
-  &__logo {
-    width: 143px;
-    height: 32px;
-    display: block;
+  &__wrapper {
+    position: relative;
+    &-right {
+      align-items: center;
+      column-gap: 20px;
+    }
+  }
+
+  &__menu {
+    margin: 0;
+    align-items: center;
   }
 
   &__login {
     font-family: 'Play';
     font-size: 24px;
     line-height: 32px;
+    border: none;
     color: var(--white);
     background-color: transparent;
-    border: none;
-    cursor: pointer;
+
+    width: 24px;
+    height: 24px;
+  }
+
+  &__login svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  &__login svg path {
+    fill: var(--white);
+    fill-opacity: 1;
   }
 }
 
-nav {
-  margin: 0;
-  margin-right: 40px;
-  column-gap: 40px;
-  font-family: 'Play';
-  font-size: 24px;
-  line-height: 32px;
+@media (min-width: 1024px) {
+  .header {
+    padding: 32px 0;
 
-  a {
+    &__wrapper {
+      margin: 0 auto;
+      width: 100%;
+      column-gap: 80px;
+      align-items: center;
+
+      &-right {
+        flex-grow: 1;
+        justify-content: space-between;
+        column-gap: 40px;
+      }
+    }
+
+    &__logo img {
+      width: 143px;
+    }
+
+    &__menu {
+      column-gap: 40px;
+      font-family: 'Play';
+      font-size: 24px;
+      line-height: 32px;
+    }
+
+    &__login {
+      width: max-content;
+      height: unset;
+    }
+  }
+
+  .header__login,
+  .menu__link {
     display: inline-block;
     color: var(--white);
     border-bottom: 1.5px solid transparent;
-    transition: 0.4s border-bottom-color ease-in-out;
+    transition: 0.3s border-bottom-color ease-in-out;
+  }
 
-    &.router-link-exact-active {
-      border-bottom-color: var(--pink);
-    }
+  .router-link-exact-active {
+    border-bottom-color: var(--pink);
   }
 }
-
-.search {
-  margin-right: auto;
-  padding: 12px 16px;
-  width: 559px;
-  border-radius: 8px;
-  background-color: var(--background-secondary);
-
-  &__button,
-  &__input {
-    border: none;
-    outline: none;
-    background-color: inherit;
-  }
-
-  &__button {
-    margin-right: 12px;
-  }
-
-  &__input {
-    width: 100%;
-    font-size: 18px;
-    line-height: 24px;
-    color: var(--white50);
-  }
-
-  &__input:focus-visible,
-  &__input:focus {
-    border: none;
-    outline: none;
-  }
-}
-
-/* @media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
-} */
 </style>

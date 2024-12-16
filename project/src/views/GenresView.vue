@@ -58,50 +58,63 @@ onMounted(() => {
   </main>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.genres {
+  margin: 0 auto;
+  padding: 16px 20px 40px;
+  width: 100%;
+}
+
+.cards {
+  flex-wrap: wrap;
+  row-gap: 24px;
+  column-gap: 12px;
+  align-items: center;
+  justify-content: center;
+
+  &__card {
+    width: 290px;
+    height: 304px;
+    border-radius: 24px;
+    overflow: hidden;
+  }
+
+  &__link {
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    box-shadow: 0px 0px 80px var(--white33);
+  }
+
+  &__descr {
+    height: 84px;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    background-color: var(--black);
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    color: var(--content-primary);
+    text-transform: capitalize;
+  }
+
+  &__poster {
+    width: 100%;
+    height: 100%;
+    max-height: 220px;
+    object-fit: cover;
+  }
+}
+
 @media (min-width: 1024px) {
   .genres {
-    margin: 0 auto;
-    width: 100%;
+    padding: 0;
+    padding-top: 32px;
   }
   .cards {
-    flex-wrap: wrap;
-    row-gap: 80px;
+    row-gap: 64px;
     column-gap: 40px;
-
-    &__card {
-      width: 290px;
-      height: 304px;
-    }
-
-    &__link {
-      width: 100%;
-      height: 100%;
-      flex-direction: column;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0px 0px 80px var(--white33);
-    }
-
-    &__descr {
-      height: 84px;
-      justify-content: center;
-      align-items: center;
-      flex-shrink: 0;
-      background-color: var(--black);
-      font-size: 24px;
-      font-weight: 700;
-      line-height: 32px;
-      color: var(--content-primary);
-      text-transform: capitalize;
-    }
-
-    &__poster {
-      width: 100%;
-      height: 100%;
-      max-height: 220px;
-      object-fit: cover;
-    }
   }
 }
 </style>

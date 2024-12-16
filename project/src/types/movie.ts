@@ -40,7 +40,10 @@ export type TGenreRu = 'боевик'
   | 'военный'
   | 'вестерн';
 
-export type TFavorites = string[];
+export type TGenreForSpan = {
+  id: number;
+  genre: string;
+};
 
 export type TAttribute = number | 'random';
 

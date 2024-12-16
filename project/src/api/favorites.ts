@@ -1,12 +1,16 @@
 import { SERVER_API } from "./constants";
-import type { TFavorites, TMovie } from "@/types/movie";
+import type { TMovie } from "@/types/movie";
 
 const FAVORITES_API = SERVER_API + '/favorites';
 
-export const getFavorites = async (): Promise<TMovie[] | null> => {
+export const getFavorites = async (): Promise<TMovie[] | []> => {
   try {
-    const response = await fetch(FAVORITES_API);
-    return await response.json();
+    const response = await fetch(FAVORITES_API, {
+      credentials: 'include',
+    });
+    if (response.status === 200) {
+      return await response.json();
+    }
   } catch (error) {
     let message = '';
     if (error instanceof Error) {
@@ -15,48 +19,55 @@ export const getFavorites = async (): Promise<TMovie[] | null> => {
       message = `Ошибка: Не удалось загрузить список фильмов`;
     }
     console.error(message);
-    return null;
   }
+  return [];
 }
 
-export const setFavorites = async (id: number): Promise<TFavorites | null> => {
+export const addToFavorites = async (movieId: number | string): Promise<boolean> => {
+  const id = typeof movieId !== 'string' ? movieId.toString() : movieId;
   try {
     const response = await fetch(FAVORITES_API, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(id.toString()),
+      credentials: 'include',
+      body: JSON.stringify({ id }),
     });
 
-    const res = await response.json();
     if (response.status === 200) {
-      return res.favorites;
-    } else if (response.status === 400) {
-      throw new Error(res.error);
+      const res = await response.json();
+      if (res.result) {
+        return true;
+      } else {
+        throw new Error('Ошибка удаления фильма из избранных');
+      }
     }
-
   } catch (error) {
     console.error(error);
   }
-  return null;
+  return false;
 }
 
-export const deleteFavorites = async (id: number): Promise<TFavorites | null> => {
+export const removeFromFavorites = async (id: number | string): Promise<boolean> => {
   try {
     const responсe = await fetch(`${FAVORITES_API}/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
       },
+      credentials: 'include',
     });
     if (responсe.status === 200) {
       const res = await responсe.json();
-      return res.favorites;
+      if (res.result === true) {
+        return true;
+      } else {
+        throw new Error('Ошибка удаления фильма из избранных');
+      }
     }
-    throw new Error('Не удалось загрузить список жанров');
   } catch (error) {
     console.error(error);
-    return null;
   }
+  return false;
 }

@@ -19,11 +19,18 @@ const router = createRouter({
       name: 'filmsOfGenre',
       component: () => import('../views/GenreFilmsView.vue'),
     },
-
     {
       path: '/movies/:id',
       name: 'movie',
       component: () => import('../views/MovieCardView.vue'),
+    },
+    {
+      path: '/user',
+      name: 'userPage',
+      component: () => import('../views/UserPage.vue'),
+      meta: {
+        requiredAuth: true,
+      }
     },
     {
       path: '/:pathMatch(.*)*',

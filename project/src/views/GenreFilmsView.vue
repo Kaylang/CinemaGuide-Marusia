@@ -5,6 +5,7 @@ import type { TCard, TGenre, TMovie } from '@/types/movie';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import PosterCard from '@/components/PosterCard.vue';
+import TheButton from '@/components/TheButton.vue';
 
 const route = useRoute();
 
@@ -40,7 +41,7 @@ const getMoviesList = async () => {
   }
 };
 
-const getMoreMovies = async () => {
+const onClick = async () => {
   const movies = await getMovies({
     count: 15,
     page: ++page.value,
@@ -67,22 +68,19 @@ onMounted(() => {
           v-for="movie in movieCards"
           :key="movie.id"
           :movie="movie"
+          :classes="'genre__poster'"
         />
       </div>
-      <button
-        class="genre__more btn-primary"
-        v-if="isMore"
-        @click="getMoreMovies()"
-        type="button"
-      >
+      <TheButton :btn-classes="'btn-primary'" v-if="isMore" @click="onClick">
         Показать ещё
-      </button>
+      </TheButton>
     </section>
   </main>
 </template>
 
 <style lang="scss" scoped>
 .genre {
+  padding-bottom: 40px;
   text-align: center;
 
   &__title {
@@ -90,14 +88,26 @@ onMounted(() => {
   }
 
   &__wrapper {
-    margin-bottom: 64px;
+    margin-bottom: 40px;
     flex-wrap: wrap;
-    column-gap: 40px;
-    row-gap: 64px;
+    justify-content: center;
+    row-gap: 24px;
+    column-gap: 20px;
   }
+}
 
-  &__more {
-    padding: 16px 48px;
+@media (min-width: 1024px) {
+  .genre {
+    padding-bottom: 160px;
+    &__wrapper {
+      margin-bottom: 64px;
+      column-gap: 40px;
+      row-gap: 64px;
+      &__poster {
+        width: 335px;
+        height: 502px;
+      }
+    }
   }
 }
 </style>

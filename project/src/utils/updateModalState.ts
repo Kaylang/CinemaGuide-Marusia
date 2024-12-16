@@ -1,5 +1,5 @@
-import { isModalOpen } from "@/singltons/IsModalOpen";
+import { isModalOpen } from "@/singltons/isModalOpen";
 
-export const updateModalStatus = (value: boolean) => {
+export const updateModalState = (value: boolean) => {
   isModalOpen.value = value;
 };

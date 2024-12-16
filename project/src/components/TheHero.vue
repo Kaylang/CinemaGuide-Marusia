@@ -1,54 +1,87 @@
 <script lang="ts" setup>
-import { getOneMovie } from '@/api/movies';
-import type { TMovie } from '@/types/movie';
-import { ref, watch } from 'vue';
+import TheButton from './TheButton.vue';
 import IconStar from './icons/IconStar.vue';
-import { convertToHours } from '@/utils/convertTime';
-import { EGenres } from '@/enums/genres';
 import IconFavorite from './icons/iconFavorite.vue';
 import IconRenew from './icons/IconRenew.vue';
-import { updateModalStatus } from '@/utils/updateModalState';
+import IconFavoriteColored from './icons/iconFavoriteColored.vue';
+import { onMounted, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
+import { getOneMovie } from '@/api/movies';
+import { convertToHours } from '@/utils/convertTime';
+import { updateModalState } from '@/utils/updateModalState';
+import { addMovieToFavorites } from '@/utils/addMovieToFavorites';
+import { removeMovieFromFavorites } from '@/utils/removeMovieFromFavorites';
+import { convertGenres } from '@/utils/convertGenres';
+import type { TGenreForSpan, TMovie } from '@/types/movie';
+import TheImage from './TheImage.vue';
+import { isDesktop } from '@/singltons/isDesktop';
 
 const props = defineProps<{
   movie: TMovie;
   isCard: boolean;
+  classes?: string;
 }>();
 
 const userStore = useUserStore();
+const router = useRouter();
 
-const handleFavoriteButton = () => {
+const randomMovie = ref<TMovie | null>(null);
+const isFavorites = ref<boolean>(false);
+const genres = ref<Array<TGenreForSpan>>([]);
+const isImageLoadingError = ref<boolean>(false);
+
+const handleFavoriteButton = async () => {
   if (!userStore.isAuthorized) {
-    updateModalStatus(true);
+    updateModalState(true);
   } else {
+    if (randomMovie.value) {
+      if (!isFavorites.value) {
+        addMovieToFavorites(randomMovie.value.id);
+      } else {
+        removeMovieFromFavorites(randomMovie.value.id);
+      }
+      isFavorites.value = !isFavorites.value;
+    }
   }
 };
-// const genres = ref<string>('');
-const randomMovie = ref<TMovie | null>(null);
 
-randomMovie.value = props.movie;
+const checkFavorite = () => {
+  if (randomMovie.value) {
+    isFavorites.value = userStore
+      .getFavorites()
+      .includes(randomMovie.value.id.toString());
+  }
+};
 
 const getRandomMovie = async () => {
   randomMovie.value = await getOneMovie('random');
+  checkFavorite();
+  if (randomMovie.value?.genres)
+    genres.value = convertGenres(randomMovie.value.genres);
+};
+
+const goToMoviePage = () => {
+  if (randomMovie.value) router.push(`/movies/${randomMovie.value.id}`);
 };
 
 watch(
-  props.movie,
+  userStore,
   () => {
-    randomMovie.value = props.movie;
+    if (userStore.isAuthorized) checkFavorite();
   },
-  { immediate: true, deep: true },
+  {
+    immediate: true,
+    deep: true,
+  },
 );
 
-// watch(
-//   props.movie,
-//   () => {
-//     if (movie.value?.genres) {
-//       genres.value = getGenresFromArray(movie.value?.genres);
-//     }
-//   },
-//   { immediate: true, deep: true },
-// );
+onMounted(() => {
+  randomMovie.value = props.movie;
+  if (userStore.isAuthorized) checkFavorite();
+  if (randomMovie.value.genres)
+    genres.value = convertGenres(randomMovie.value.genres);
+});
 </script>
 
 <template>
@@ -71,16 +104,13 @@ watch(
         <span class="hero__description-year">{{
           randomMovie.releaseYear
         }}</span>
-        <span v-if="randomMovie.genres" class="hero__description-genre">{{
-          randomMovie.genres.reduce(
-            (accum, genre, index, genArray) =>
-              accum +
-              (index < genArray.length - 1
-                ? EGenres[genre] + ', '
-                : EGenres[genre]),
-            '',
-          )
-        }}</span>
+        <span
+          v-for="genre in genres"
+          class="hero__description-genre"
+          :key="genre.id"
+        >
+          {{ genre.genre }}
+        </span>
         <span v-if="randomMovie.runtime" class="hero__description-duration">{{
           convertToHours(randomMovie.runtime)
         }}</span>
@@ -94,39 +124,45 @@ watch(
         </p>
       </div>
       <div class="hero__description-bottom bottom flex">
-        <button class="hero__description-trailer btn-primary" type="button">
-          Трейлер
-        </button>
-        <router-link
-          v-if="!isCard"
-          class="hero__description-about btn-secondary"
-          :to="{ name: 'movie', params: { id: randomMovie.id } }"
-        >
-          О фильме
-        </router-link>
-        <button
-          class="hero__description-icon btn-secondary btn-svg flex"
-          type="button"
-          @click="handleFavoriteButton"
-        >
-          <IconFavorite />
-        </button>
-        <button
-          class="hero__description-icon btn-secondary btn-svg flex"
-          v-if="!isCard"
-          type="button"
-          @click="getRandomMovie()"
-        >
-          <IconRenew />
-        </button>
+        <div class="bottom-top">
+          <TheButton :btn-classes="'hero__description-trailer btn-primary'">
+            Трейлер
+          </TheButton>
+        </div>
+        <div class="bottom-bottom flex">
+          <TheButton
+            v-if="!isCard"
+            :btn-classes="'btn-secondary hero__description-about'"
+            @click="goToMoviePage"
+          >
+            О фильме
+          </TheButton>
+          <TheButton
+            :btn-classes="'hero__description-icon btn-secondary btn-svg flex'"
+            @click="handleFavoriteButton"
+          >
+            <IconFavoriteColored v-if="isFavorites" />
+            <IconFavorite v-if="!isFavorites" />
+          </TheButton>
+          <TheButton
+            :btn-classes="'hero__description-icon btn-secondary btn-svg flex'"
+            v-if="!isCard"
+            @click="getRandomMovie"
+          >
+            <IconRenew />
+          </TheButton>
+        </div>
       </div>
     </div>
     <div class="hero__poster">
-      <img
-        v-if="randomMovie.backdropUrl"
-        class="hero__poster-image"
-        :src="randomMovie.backdropUrl"
-        :alt="randomMovie.title"
+      <div class="error" v-if="isImageLoadingError">Error!</div>
+      <TheImage
+        v-else-if="!isImageLoadingError"
+        :classes="'hero__poster-image'"
+        :srcString="randomMovie.backdropUrl"
+        :altString="randomMovie.title"
+        :key="'i' + randomMovie.id"
+        :is-big="isDesktop"
       />
     </div>
   </section>
@@ -134,21 +170,20 @@ watch(
 
 <style lang="scss" scoped>
 .hero {
-  padding-top: 32px;
-  min-height: 586px;
-  justify-content: space-between;
-  align-items: center;
+  padding: 0 20px;
+  flex-direction: column-reverse;
+  row-gap: 24px;
+  align-items: flex-start;
 
   &__description {
-    padding-right: 12px;
-    width: 45%;
-    max-width: 600px;
     flex-direction: column;
 
     &-top {
       margin-bottom: 16px;
+      flex-wrap: wrap;
       align-items: center;
       column-gap: 16px;
+      row-gap: 8px;
       color: var(--content-secondary);
     }
 
@@ -172,14 +207,22 @@ watch(
     }
 
     &-middle {
-      margin-bottom: 80px;
+      margin-bottom: 32px;
       flex-direction: column;
       row-gap: 16px;
     }
 
+    &-title {
+      margin-bottom: 0;
+    }
+
     &-trailer,
     &-about {
-      padding: 16px 48px;
+      padding: 16px 40px;
+    }
+
+    &-trailer {
+      width: 335px;
     }
 
     &-icon {
@@ -187,24 +230,80 @@ watch(
       align-items: center;
       justify-content: center;
     }
+  }
 
-    &-bottom {
-      align-items: center;
-      column-gap: 16px;
-    }
+  &__description,
+  &__poster {
+    width: 100%;
   }
 
   &__poster {
-    max-width: 680px;
-    max-height: 552px;
-    width: 55%;
-    &-image {
-      width: 100%;
-      height: 100%;
-      min-height: 552px;
-      display: block;
-      border-radius: 16px;
-      object-fit: cover;
+    height: 234px;
+  }
+
+  &__poster :deep(.image) {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+}
+
+.bottom {
+  width: 100%;
+  flex-wrap: wrap;
+  column-gap: 16px;
+  row-gap: 16px;
+  align-items: center;
+  justify-content: center;
+
+  &-top {
+    text-align: center;
+  }
+
+  &-bottom {
+    align-items: center;
+    justify-content: space-between;
+    column-gap: 10px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    padding: 32px 0 0;
+    flex-direction: row;
+    justify-content: space-between;
+
+    &__poster {
+      max-width: 680px;
+      height: 552px;
+    }
+
+    &__description {
+      padding-right: 12px;
+      max-width: 600px;
+
+      &-middle {
+        margin-bottom: 60px;
+      }
+
+      &-trailer,
+      &-about {
+        padding: 16px 48px;
+      }
+
+      &-trailer {
+        width: unset;
+      }
+    }
+  }
+
+  .bottom {
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-start;
+    column-gap: 16px;
+
+    &-bottom {
+      max-width: unset;
     }
   }
 }
