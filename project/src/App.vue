@@ -3,11 +3,13 @@ import { RouterView } from 'vue-router';
 import TheFooter from '@/components/TheFooter.vue';
 import TheHeader from '@/components/TheHeader.vue';
 import AppModal from '@/components/AppModal.vue';
-import { isModalOpen } from '@/singltons/isModalOpen';
-import { updateModalState } from '@/utils/updateModalState';
 import { getUser } from './utils/getUser';
 import { onBeforeMount, onMounted, onUnmounted } from 'vue';
 import { isDesktop } from './singltons/isDesktop';
+import { useModalStore } from './stores/modal';
+
+const modalStore = useModalStore();
+modalStore.setModalType('authorization');
 
 const onResize = () => {
   isDesktop.value = window.innerWidth > 1024;
@@ -32,9 +34,9 @@ onBeforeMount(async () => {
   <RouterView />
   <TheFooter />
   <AppModal
-    :is-modal-open="isModalOpen"
-    :type="'autorization'"
-    @update:is-modal-open="updateModalState"
+    :is-modal-open="modalStore.getModalState()"
+    :type="modalStore.getModalType()"
+    @update:is-modal-open="modalStore.setModalState"
   />
 </template>
 

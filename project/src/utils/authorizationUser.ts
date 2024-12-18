@@ -1,7 +1,7 @@
 import { useUserStore } from "@/stores/user";
 import type { TUser } from "@/types/user";
 
-export const autorizationUser = async (userData: TUser) => {
+export const authorizationUser = async (userData: TUser) => {
   const user = useUserStore();
   user.setEmail(userData.email);
   if (userData.name) user.setName(userData.name);

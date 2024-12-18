@@ -1,19 +1,13 @@
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
 import AuthFormField from './AuthFormField.vue';
-import { validateForm } from '@/utils/validateForm';
-import { isFormValid } from '@/singltons/isFormValid';
-import type { TFormField } from '@/types/form';
-import { isLogin } from '@/singltons/isLogin';
 import TheButton from './TheButton.vue';
+import { useAuthFormStore } from '@/stores/authForm';
+import type { TFormField } from '@/types/form';
 
-const props = defineProps({
+const {} = defineProps({
   isFormOpen: {
     type: Boolean,
-  },
-  formFields: {
-    type: Array<TFormField>,
-    required: true,
   },
   title: {
     type: String,
@@ -29,16 +23,19 @@ const props = defineProps({
 
 const emit = defineEmits(['update:isLogin', 'submit:submitForm']);
 
-const fields = ref<TFormField[]>(props.formFields);
+const authFormStore = useAuthFormStore();
+
+const fields = ref<TFormField[]>([]);
+fields.value = authFormStore.getFormFields();
 const fieldset = ref<HTMLFieldSetElement | null>();
 
 const onChangeAuthClick = () => {
-  isLogin.value = !isLogin.value;
-  emit('update:isLogin', isLogin.value);
+  authFormStore.setLoginState(!authFormStore.getLoginState());
+  emit('update:isLogin', authFormStore.getLoginState());
 };
 
-watch(props, () => {
-  fields.value = [...props.formFields];
+watch(authFormStore.getLoginState, () => {
+  fields.value = authFormStore.getFormFields();
 });
 </script>
 
@@ -80,9 +77,9 @@ watch(props, () => {
                   :placeholder="field.placeholder"
                   @focusout="
                     field.isTouched = true;
-                    validateForm(fields);
+                    authFormStore.validateForm(fields);
                   "
-                  @input="validateForm(fields)"
+                  @input="authFormStore.validateForm(fields)"
                 />
               </AuthFormField>
             </template>
@@ -91,7 +88,7 @@ watch(props, () => {
         <TheButton
           :btnClasses="'btn-primary btn-w-100'"
           :btnType="'submit'"
-          :disabled="!isFormValid"
+          :disabled="!authFormStore.getIsFormValid()"
         >
           {{ submitText }}
         </TheButton>

@@ -1,10 +1,10 @@
 import { getUserProfile } from "@/api/user";
-import { autorizationUser } from "./authorizationUser";
+import { authorizationUser } from "./authorizationUser";
 
 export const getUser = async () => {
   const res = await getUserProfile();
   if (res.data) {
-    await autorizationUser(res.data);
+    await authorizationUser(res.data);
     return true;
   }
   return false;

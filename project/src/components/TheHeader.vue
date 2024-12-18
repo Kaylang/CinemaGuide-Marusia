@@ -1,14 +1,15 @@
 <script lang="ts" setup>
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/stores/user';
-import { updateModalState } from '@/utils/updateModalState';
 import { isDesktop } from '@/singltons/isDesktop';
 import TheButton from './TheButton.vue';
 import IconGenres from './icons/IconGenres.vue';
 import TheSearch from './TheSearch.vue';
 import IconUser from './icons/IconUser.vue';
+import { useModalStore } from '@/stores/modal';
 
 const userStore = useUserStore();
+const modalStore = useModalStore();
 </script>
 
 <template>
@@ -42,7 +43,7 @@ const userStore = useUserStore();
 
         <TheButton
           :btn-classes="'header__login'"
-          @click="updateModalState(true)"
+          @click="modalStore.setModalState(true)"
           v-if="!userStore.isAuthorized"
         >
           <template v-if="isDesktop">Войти</template>

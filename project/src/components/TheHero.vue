@@ -9,13 +9,13 @@ import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { getOneMovie } from '@/api/movies';
 import { convertToHours } from '@/utils/convertTime';
-import { updateModalState } from '@/utils/updateModalState';
 import { addMovieToFavorites } from '@/utils/addMovieToFavorites';
 import { removeMovieFromFavorites } from '@/utils/removeMovieFromFavorites';
 import { convertGenres } from '@/utils/convertGenres';
 import type { TGenreForSpan, TMovie } from '@/types/movie';
 import TheImage from './TheImage.vue';
 import { isDesktop } from '@/singltons/isDesktop';
+import { useModalStore } from '@/stores/modal';
 
 const props = defineProps<{
   movie: TMovie;
@@ -24,6 +24,7 @@ const props = defineProps<{
 }>();
 
 const userStore = useUserStore();
+const modalStore = useModalStore();
 const router = useRouter();
 
 const randomMovie = ref<TMovie | null>(null);
@@ -33,7 +34,7 @@ const isImageLoadingError = ref<boolean>(false);
 
 const handleFavoriteButton = async () => {
   if (!userStore.isAuthorized) {
-    updateModalState(true);
+    modalStore.setModalState(true);
   } else {
     if (randomMovie.value) {
       if (!isFavorites.value) {
@@ -64,6 +65,10 @@ const getRandomMovie = async () => {
 const goToMoviePage = () => {
   if (randomMovie.value) router.push(`/movies/${randomMovie.value.id}`);
 };
+
+// const openTrailer = () => {
+
+// }
 
 watch(
   userStore,

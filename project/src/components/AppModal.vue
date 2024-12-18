@@ -3,19 +3,17 @@ import ModalAuthForm from './ModalAuthForm.vue';
 import ModalInfo from './ModalInfo.vue';
 import TheButton from './TheButton.vue';
 import { ref, watch } from 'vue';
-import { formFields } from '@/singltons/formFields';
-import { isLogin } from '@/singltons/isLogin';
-import { isFormValid } from '@/singltons/isFormValid';
 import { loginUser, registerUser } from '@/api/user';
 import { getUser } from '@/utils/getUser';
 import type { TUser } from '@/types/user';
-import type { TInfoBtnText, TInfoTitle, TModalType } from '@/types/modalInfo';
+import type { TInfoBtnText, TInfoTitle, TInfoModalType } from '@/types/modal';
 import type {
   TFormButtonText,
   TFormField,
   TFormTitle,
   TSubmitButtonText,
 } from '@/types/form';
+import { useAuthFormStore } from '@/stores/authForm';
 
 const props = defineProps({
   isModalOpen: {
@@ -27,11 +25,13 @@ const props = defineProps({
 });
 const emit = defineEmits(['update:isModalOpen']);
 
+const authFormStore = useAuthFormStore();
+
 const formTitle = ref<TFormTitle>('');
 const submitButtonText = ref<TSubmitButtonText>('Войти');
 const formButtonText = ref<TFormButtonText>('Регистрация');
 
-const changeAuthFormType = (isLogin: boolean) => {
+const changeAuthFormData = (isLogin: boolean) => {
   if (isLogin) {
     formTitle.value = '';
     submitButtonText.value = 'Войти';
@@ -43,7 +43,7 @@ const changeAuthFormType = (isLogin: boolean) => {
   }
 };
 
-const modalType = ref<TModalType>('info');
+const modalType = ref<TInfoModalType>('info');
 const isAuthFormOpen = ref<boolean>(false);
 const isModalInfoOpen = ref<boolean>(false);
 const infoTitle = ref<TInfoTitle>('Регистрация завершена');
@@ -67,11 +67,11 @@ const changeModalInfoData = (errorText: string | undefined) => {
 };
 
 const closeModal = () => {
-  isLogin.value = true;
+  authFormStore.setLoginState(true);
   emit('update:isModalOpen', false);
 };
 
-if (props.type === 'autorization') isAuthFormOpen.value = true;
+if (props.type === 'authorization') isAuthFormOpen.value = true;
 
 const submitAuthForm = async (fields: TFormField[]) => {
   const data: TUser = {
@@ -83,10 +83,10 @@ const submitAuthForm = async (fields: TFormField[]) => {
     if (field.name !== 'passwordConfirm') data[field.name] = field.value;
     field.isTouched = false;
     field.isValid = false;
-    isFormValid.value = false;
+    authFormStore.setIsFormValid(false);
   }
 
-  if (isLogin.value) {
+  if (authFormStore.getLoginState()) {
     const response = await loginUser(data);
     if (response?.status) {
       getUser();
@@ -103,8 +103,8 @@ const submitAuthForm = async (fields: TFormField[]) => {
         infoDescription.value = 'Используйте вашу электронную почту для входа';
         infoBtnText.value = 'Войти';
       }
-      isLogin.value = true;
-      changeAuthFormType(isLogin.value);
+      authFormStore.setLoginState(true);
+      changeAuthFormData(authFormStore.getLoginState());
 
       isAuthFormOpen.value = false;
       isModalInfoOpen.value = true;
@@ -119,7 +119,7 @@ const closeModalInfo = () => {
   isModalInfoOpen.value = false;
   if (modalType.value.includes('error')) {
     if (modalType.value === 'reg-error') {
-      changeAuthFormType(isLogin.value);
+      changeAuthFormData(authFormStore.getLoginState());
     }
   }
   isAuthFormOpen.value = true;
@@ -142,7 +142,7 @@ watch(
   () => {
     if (props.isModalOpen) {
       document.body.style.overflow = 'hidden';
-      changeAuthFormType(isLogin.value);
+      changeAuthFormData(authFormStore.getLoginState());
     } else {
       document.body.removeAttribute('style');
     }
@@ -166,21 +166,10 @@ watch(
           ></TheButton>
           <ModalAuthForm
             v-if="isAuthFormOpen"
-            :formFields="
-              isLogin
-                ? formFields
-                    .filter(item => item.isLogin)
-                    .map(item => {
-                      return { ...item, value: '' };
-                    })
-                : formFields.map(item => {
-                    return { ...item, value: '' };
-                  })
-            "
             :title="formTitle"
             :submitText="submitButtonText"
             :changeAuthText="formButtonText"
-            @update:is-login="changeAuthFormType"
+            @update:is-login="changeAuthFormData"
             @submit:submit-form="submitAuthForm"
           />
           <ModalInfo

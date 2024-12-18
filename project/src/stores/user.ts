@@ -3,16 +3,16 @@ import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
   const isAuthorized = ref<boolean>(false);
-  const name = ref<string>('');
-  const surname = ref<string>('');
-  const email = ref<string>('');
-  const favorites = ref<string[]>([])
+  const name = ref<string>();
+  const surname = ref<string>();
+  const email = ref<string>();
+  const favorites = ref<string[]>([]);
 
   const setName = (value: string) => {
     name.value = value;
   }
 
-  const getName = (): string => {
+  const getName = () => {
     return name.value;
   }
 
@@ -20,7 +20,7 @@ export const useUserStore = defineStore('user', () => {
     surname.value = value;
   }
 
-  const getSurname = (): string => {
+  const getSurname = () => {
     return surname.value;
   }
 
