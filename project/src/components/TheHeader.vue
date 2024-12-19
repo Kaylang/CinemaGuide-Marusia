@@ -10,6 +10,11 @@ import { useModalStore } from '@/stores/modal';
 
 const userStore = useUserStore();
 const modalStore = useModalStore();
+
+const handlerLoginBtnClick = () => {
+  modalStore.setModalType('authorization');
+  modalStore.setModalState(true);
+};
 </script>
 
 <template>
@@ -43,7 +48,7 @@ const modalStore = useModalStore();
 
         <TheButton
           :btn-classes="'header__login'"
-          @click="modalStore.setModalState(true)"
+          @click="handlerLoginBtnClick"
           v-if="!userStore.isAuthorized"
         >
           <template v-if="isDesktop">Войти</template>

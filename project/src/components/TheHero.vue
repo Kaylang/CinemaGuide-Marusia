@@ -16,6 +16,7 @@ import type { TGenreForSpan, TMovie } from '@/types/movie';
 import TheImage from './TheImage.vue';
 import { isDesktop } from '@/singltons/isDesktop';
 import { useModalStore } from '@/stores/modal';
+import { useTrailerStore } from '@/stores/trailer';
 
 const props = defineProps<{
   movie: TMovie;
@@ -25,6 +26,7 @@ const props = defineProps<{
 
 const userStore = useUserStore();
 const modalStore = useModalStore();
+const trailerStore = useTrailerStore();
 const router = useRouter();
 
 const randomMovie = ref<TMovie | null>(null);
@@ -32,8 +34,9 @@ const isFavorites = ref<boolean>(false);
 const genres = ref<Array<TGenreForSpan>>([]);
 const isImageLoadingError = ref<boolean>(false);
 
-const handleFavoriteButton = async () => {
+const handleFavoriteBtnClick = async () => {
   if (!userStore.isAuthorized) {
+    modalStore.setModalType('authorization');
     modalStore.setModalState(true);
   } else {
     if (randomMovie.value) {
@@ -66,9 +69,16 @@ const goToMoviePage = () => {
   if (randomMovie.value) router.push(`/movies/${randomMovie.value.id}`);
 };
 
-// const openTrailer = () => {
-
-// }
+const handlerTrailerBtnClick = () => {
+  if (randomMovie.value) {
+    trailerStore.setMovieTitle(randomMovie.value.title);
+    if (randomMovie.value.trailerYouTubeId) {
+      trailerStore.setMovieTrailerId(randomMovie.value.trailerYouTubeId);
+      modalStore.setModalType('trailer');
+      modalStore.setModalState(true);
+    }
+  }
+};
 
 watch(
   userStore,
@@ -130,7 +140,10 @@ onMounted(() => {
       </div>
       <div class="hero__description-bottom bottom flex">
         <div class="bottom-top">
-          <TheButton :btn-classes="'hero__description-trailer btn-primary'">
+          <TheButton
+            :btn-classes="'hero__description-trailer btn-primary'"
+            @click="handlerTrailerBtnClick"
+          >
             Трейлер
           </TheButton>
         </div>
@@ -144,7 +157,7 @@ onMounted(() => {
           </TheButton>
           <TheButton
             :btn-classes="'hero__description-icon btn-secondary btn-svg flex'"
-            @click="handleFavoriteButton"
+            @click="handleFavoriteBtnClick"
           >
             <IconFavoriteColored v-if="isFavorites" />
             <IconFavorite v-if="!isFavorites" />

@@ -1,8 +1,11 @@
 <script lang="ts" setup>
 import ModalAuthForm from './ModalAuthForm.vue';
 import ModalInfo from './ModalInfo.vue';
+import ModalTrailer from './ModalTrailer.vue';
 import TheButton from './TheButton.vue';
 import { ref, watch } from 'vue';
+import { useAuthFormStore } from '@/stores/authForm';
+import { useModalStore } from '@/stores/modal';
 import { loginUser, registerUser } from '@/api/user';
 import { getUser } from '@/utils/getUser';
 import type { TUser } from '@/types/user';
@@ -13,20 +16,15 @@ import type {
   TFormTitle,
   TSubmitButtonText,
 } from '@/types/form';
-import { useAuthFormStore } from '@/stores/authForm';
 
-const props = defineProps({
-  isModalOpen: {
-    type: Boolean,
-  },
-  type: {
-    type: String,
-  },
-});
+const props = defineProps<{
+  isModalOpen: boolean;
+}>();
+
 const emit = defineEmits(['update:isModalOpen']);
 
 const authFormStore = useAuthFormStore();
-
+const modalStore = useModalStore();
 const formTitle = ref<TFormTitle>('');
 const submitButtonText = ref<TSubmitButtonText>('Войти');
 const formButtonText = ref<TFormButtonText>('Регистрация');
@@ -46,6 +44,8 @@ const changeAuthFormData = (isLogin: boolean) => {
 const modalType = ref<TInfoModalType>('info');
 const isAuthFormOpen = ref<boolean>(false);
 const isModalInfoOpen = ref<boolean>(false);
+const isTrailerOpen = ref<boolean>(false);
+
 const infoTitle = ref<TInfoTitle>('Регистрация завершена');
 const infoDescription = ref<string>(
   'Используйте вашу электронную почту для входа',
@@ -70,8 +70,6 @@ const closeModal = () => {
   authFormStore.setLoginState(true);
   emit('update:isModalOpen', false);
 };
-
-if (props.type === 'authorization') isAuthFormOpen.value = true;
 
 const submitAuthForm = async (fields: TFormField[]) => {
   const data: TUser = {
@@ -152,6 +150,18 @@ watch(
     deep: true,
   },
 );
+
+watch(modalStore, () => {
+  switch (modalStore.getModalType()) {
+    case 'authorization': {
+      isAuthFormOpen.value = true;
+      break;
+    }
+    case 'trailer': {
+      isTrailerOpen.value = true;
+    }
+  }
+});
 </script>
 
 <template>
@@ -165,7 +175,9 @@ watch(
             @click="onCloseClick"
           ></TheButton>
           <ModalAuthForm
-            v-if="isAuthFormOpen"
+            v-if="
+              modalStore.getModalType() === 'authorization' && isAuthFormOpen
+            "
             :title="formTitle"
             :submitText="submitButtonText"
             :changeAuthText="formButtonText"
@@ -173,13 +185,16 @@ watch(
             @submit:submit-form="submitAuthForm"
           />
           <ModalInfo
-            v-if="isModalInfoOpen"
+            v-if="
+              modalStore.getModalType() === 'authorization' && isModalInfoOpen
+            "
             :type="modalType"
             :title="infoTitle"
             :description="infoDescription"
             :btn-text="infoBtnText"
             @update:close-modal-info="closeModalInfo"
           />
+          <ModalTrailer v-if="modalStore.getModalType() === 'trailer'" />
         </div>
       </div>
     </div>

@@ -59,7 +59,7 @@ export type TMovie = {
   production?: string,
   director?: string,
   backdropUrl?: string,
-  trailerYoutubeId?: string,
+  trailerYouTubeId?: string,
   language?: string,
   tmdbRating?: number,
   cast?: string[],

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { onBeforeUnmount, ref, watch } from 'vue';
 import IconSearch from './icons/IconSearch.vue';
 import TheButton from './TheButton.vue';
-import { isDesktop } from '@/singltons/isDesktop';
-import type { TGenre, TMovie } from '@/types/movie';
-import { getMovies } from '@/api/movies';
 import SearchMovieCard from './SearchMovieCard.vue';
+import { onBeforeUnmount, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { isDesktop } from '@/singltons/isDesktop';
+import { getMovies } from '@/api/movies';
 import { debounce } from '@/utils/debounce';
+import type { TGenre, TMovie } from '@/types/movie';
 
 const isSearchOpen = ref<boolean>(false);
 const isCloseVisible = ref<boolean>(false);
@@ -18,10 +18,7 @@ const route = useRoute();
 const genreFromPath = ref<TGenre | undefined>();
 const timerId = ref<number>(0);
 
-const getSearchData = async (args: {
-  title: string;
-  genre: TGenre | undefined;
-}) => {
+const getSearchData = async (args: { title: string; genre?: TGenre }) => {
   const { title, genre } = args;
   if (title.length > 1) {
     movies.value = await getMovies({ count: 5, title, genre });

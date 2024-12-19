@@ -9,7 +9,6 @@ import { isDesktop } from './singltons/isDesktop';
 import { useModalStore } from './stores/modal';
 
 const modalStore = useModalStore();
-modalStore.setModalType('authorization');
 
 const onResize = () => {
   isDesktop.value = window.innerWidth > 1024;
@@ -35,7 +34,6 @@ onBeforeMount(async () => {
   <TheFooter />
   <AppModal
     :is-modal-open="modalStore.getModalState()"
-    :type="modalStore.getModalType()"
     @update:is-modal-open="modalStore.setModalState"
   />
 </template>
