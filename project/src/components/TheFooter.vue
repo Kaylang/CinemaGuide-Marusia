@@ -52,6 +52,10 @@ import IconYoutube from './icons/IconYoutube.vue';
     justify-content: flex-end;
 
     &__socials {
+      &-link {
+        cursor: pointer;
+      }
+
       &-link svg {
         width: 36px;
         height: 36px;

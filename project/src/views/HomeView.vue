@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
 import MoviesList from '@/components/MoviesList.vue';
 import TheHero from '../components/TheHero.vue';
+import { onMounted, ref } from 'vue';
 import { getOneMovie, getTopTenMovies } from '@/api/movies';
 import type { TCard, TMovie } from '@/types/movie';
 

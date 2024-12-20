@@ -1,17 +1,17 @@
+<!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <script lang="ts" setup>
-import { isDesktop } from '@/singltons/isDesktop';
-import { useTrailerStore } from '@/stores/trailer';
-import { onBeforeMount, ref, watch } from 'vue';
 import TheSpinner from './TheSpinner.vue';
+import { onBeforeMount, ref, watch } from 'vue';
+import { useTrailerStore } from '@/stores/trailer';
+import { debounce } from '@/utils/debounce';
+import { isDesktop } from '@/singltons/isDesktop';
 
 const trailerStore = useTrailerStore();
 
 const isLoading = ref<boolean>(true);
 const frameWidth = ref<string>();
 const frameHeight = ref<string>();
-// const player = ref();
-
-// const origin = location.origin;
+const player = ref();
 
 const scriptTag = ref<HTMLScriptElement>();
 const firstScriptTag = ref<HTMLElement>();
@@ -25,24 +25,38 @@ firstScriptTag.value?.parentNode?.insertBefore(
   firstScriptTag.value,
 );
 
-scriptTag.value.onload = () => {
+if (scriptTag.value) {
+  scriptTag.value.onload = () => {
+    onYouTubeIframeAPIReadyDebounced({});
+  };
+}
+
+const onFrameLoaded = (event: { target: { playVideo: () => void } }) => {
+  const iFrame = player.value.getIframe();
+  if (iFrame) iFrame.removeAttribute('style');
   isLoading.value = false;
-  // console.log(scriptTag.value?.src);
-  // onYouTubeIframeAPIReady();
-  // console.log(player.value);
+  event.target.playVideo();
 };
 
-// let player;
-// function onYouTubeIframeAPIReady() {
-//   player.value = new YT.Player('trailer', {
-//     height: frameHeight,
-//     width: frameWidth,
-//     videoId: trailerStore.getMovieTrailerId(),
-//   });
-// }
+const onYouTubeIframeAPIReadyDebounced = debounce(
+  onYouTubeIframeAPIReady,
+  1000,
+);
 
-// console.log(trailerStore.getMovieTitle());
-// console.log(trailerStore.getMovieTrailerId());
+function onYouTubeIframeAPIReady() {
+  if (window.YT) {
+    player.value = new window.YT.Player('trailer', {
+      height: frameHeight.value,
+      width: frameWidth.value,
+      frameborder: 0,
+      // origin: window.location.origin,
+      videoId: trailerStore.getMovieTrailerId(),
+      events: {
+        onReady: onFrameLoaded,
+      },
+    });
+  }
+}
 
 const setFrameSize = () => {
   if (isDesktop.value) {
@@ -64,22 +78,15 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <div class="trailer flex" id="trailer">
-    <iframe
-      v-show="!isLoading"
-      id="player"
-      type="text/html"
-      :width="frameWidth"
-      :height="frameHeight"
-      :src="`http://www.youtube.com/embed/${trailerStore.getMovieTrailerId}?controls=0&autoplay=1`"
-      frameborder="0"
-    ></iframe>
+  <div class="trailer flex">
+    <div v-show="!isLoading" id="trailer"></div>
     <TheSpinner v-if="isLoading" :class="'big'" />
   </div>
 </template>
 
 <style lang="scss">
 .trailer {
+  position: relative;
   width: 1000px;
   height: 600px;
   align-items: center;

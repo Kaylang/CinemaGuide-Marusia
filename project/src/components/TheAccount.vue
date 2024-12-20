@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { useUserStore } from '@/stores/user';
 import IconEmail from './icons/IconEmail.vue';
 import TheButton from './TheButton.vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 import { logoutUser } from '@/api/user';
 
 const user = useUserStore();

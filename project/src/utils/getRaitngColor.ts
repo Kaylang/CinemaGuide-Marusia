@@ -1,9 +1,9 @@
-export const getRaitingColor = (raitng: number): string => {
-  if (raitng < 5) {
+export const getRaitingColor = (raiting: number): string => {
+  if (raiting < 5) {
     return 'red';
-  } else if (raitng < 7) {
+  } else if (raiting < 7) {
     return 'gray';
-  } else if (raitng < 8) {
+  } else if (raiting < 8) {
     return 'green';
   } else {
     return 'gold';

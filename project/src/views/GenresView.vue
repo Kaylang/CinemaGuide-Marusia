@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import type { TGenre, TGenreCard, TGenreRu } from '@/types/movie';
 import { EGenres } from '@/enums/genres';
 import { getGenres } from '@/api/movies';
+import type { TGenre, TGenreCard, TGenreRu } from '@/types/movie';
 
 const genres = ref<TGenre[] | null>([]);
 const genresCards = ref<TGenreCard[]>([]);

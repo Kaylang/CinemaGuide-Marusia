@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { getMovies } from '@/api/movies';
-import { EGenres } from '@/enums/genres';
-import type { TCard, TGenre, TMovie } from '@/types/movie';
-import { onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
 import PosterCard from '@/components/PosterCard.vue';
 import TheButton from '@/components/TheButton.vue';
+import { getMovies } from '@/api/movies';
+import { EGenres } from '@/enums/genres';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+import type { TCard, TGenre, TMovie } from '@/types/movie';
 
 const route = useRoute();
 

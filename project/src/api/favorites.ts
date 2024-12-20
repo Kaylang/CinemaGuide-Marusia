@@ -40,7 +40,7 @@ export const addToFavorites = async (movieId: number | string): Promise<boolean>
       if (res.result) {
         return true;
       } else {
-        throw new Error('Ошибка удаления фильма из избранных');
+        throw new Error('Ошибка добавления фильма в избранные');
       }
     }
   } catch (error) {

@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import { getFavorites } from '@/api/favorites';
 import IconFavorite from '@/components/icons/iconFavorite.vue';
 import IconUser from '@/components/icons/IconUser.vue';
 import TheAccount from '@/components/TheAccount.vue';
 import TheButton from '@/components/TheButton.vue';
 import MoviesList from '@/components/MoviesList.vue';
-import type { TCard, TMovie } from '@/types/movie';
 import { onMounted, ref, watch } from 'vue';
+import { getFavorites } from '@/api/favorites';
 import { isDesktop } from '@/singltons/isDesktop';
+import type { TCard, TMovie } from '@/types/movie';
 
 const isFavorites = ref<boolean>(true);
 const isSetup = ref<boolean>(false);

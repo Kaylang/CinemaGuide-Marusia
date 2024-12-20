@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { getOneMovie } from '@/api/movies';
 import TheHero from '@/components/TheHero.vue';
+import { getOneMovie } from '@/api/movies';
 import { isDesktop } from '@/singltons/isDesktop';
-import type { TMovie } from '@/types/movie';
 import { onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import type { TMovie } from '@/types/movie';
 
 const router = useRouter();
 

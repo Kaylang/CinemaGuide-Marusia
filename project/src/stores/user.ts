@@ -3,9 +3,9 @@ import { ref } from 'vue';
 
 export const useUserStore = defineStore('user', () => {
   const isAuthorized = ref<boolean>(false);
-  const name = ref<string>();
-  const surname = ref<string>();
-  const email = ref<string>();
+  const name = ref<string>('');
+  const surname = ref<string>('');
+  const email = ref<string>('');
   const favorites = ref<string[]>([]);
 
   const setName = (value: string) => {

@@ -37,7 +37,3 @@ onBeforeMount(async () => {
     @update:is-modal-open="modalStore.setModalState"
   />
 </template>
-
-<!--
-<style scoped></style>
--->

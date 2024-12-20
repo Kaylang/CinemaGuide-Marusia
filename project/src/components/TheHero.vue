@@ -4,6 +4,7 @@ import IconStar from './icons/IconStar.vue';
 import IconFavorite from './icons/iconFavorite.vue';
 import IconRenew from './icons/IconRenew.vue';
 import IconFavoriteColored from './icons/iconFavoriteColored.vue';
+import TheImage from './TheImage.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
@@ -12,11 +13,10 @@ import { convertToHours } from '@/utils/convertTime';
 import { addMovieToFavorites } from '@/utils/addMovieToFavorites';
 import { removeMovieFromFavorites } from '@/utils/removeMovieFromFavorites';
 import { convertGenres } from '@/utils/convertGenres';
-import type { TGenreForSpan, TMovie } from '@/types/movie';
-import TheImage from './TheImage.vue';
 import { isDesktop } from '@/singltons/isDesktop';
 import { useModalStore } from '@/stores/modal';
 import { useTrailerStore } from '@/stores/trailer';
+import type { TGenreForSpan, TMovie } from '@/types/movie';
 
 const props = defineProps<{
   movie: TMovie;
@@ -58,14 +58,14 @@ const checkFavorite = () => {
   }
 };
 
-const getRandomMovie = async () => {
+const handlerRandomMovieBtnClick = async () => {
   randomMovie.value = await getOneMovie('random');
   checkFavorite();
   if (randomMovie.value?.genres)
     genres.value = convertGenres(randomMovie.value.genres);
 };
 
-const goToMoviePage = () => {
+const handlerAboutMovieBtnClick = () => {
   if (randomMovie.value) router.push(`/movies/${randomMovie.value.id}`);
 };
 
@@ -151,7 +151,7 @@ onMounted(() => {
           <TheButton
             v-if="!isCard"
             :btn-classes="'btn-secondary hero__description-about'"
-            @click="goToMoviePage"
+            @click="handlerAboutMovieBtnClick"
           >
             О фильме
           </TheButton>
@@ -165,7 +165,7 @@ onMounted(() => {
           <TheButton
             :btn-classes="'hero__description-icon btn-secondary btn-svg flex'"
             v-if="!isCard"
-            @click="getRandomMovie"
+            @click="handlerRandomMovieBtnClick"
           >
             <IconRenew />
           </TheButton>
