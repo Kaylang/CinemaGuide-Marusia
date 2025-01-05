@@ -1,36 +1,51 @@
 <script lang="ts" setup>
-import TheHero from '@/components/TheHero.vue';
+import TheHero from '@/components/page-blocks/TheHero.vue';
 import { getOneMovie } from '@/api/movies';
 import { isDesktop } from '@/singltons/isDesktop';
-import { onMounted, ref, watch } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import type { TMovie } from '@/types/movie';
+import TheSpinner from '@/components/TheSpinner.vue';
 
 const router = useRouter();
 
 const movie = ref<TMovie | null>(null);
 
 const id = ref<string>('');
+const isLoaded = ref<boolean>(false);
 
 const loadMovie = async () => {
+  isLoaded.value = false;
   id.value = router.currentRoute.value.params.id as string;
-  const response = await getOneMovie(parseInt(id.value));
+  const response = await getOneMovie(+id.value);
   movie.value = response;
+  isLoaded.value = true;
 };
 
 watch(router.currentRoute, () => {
   loadMovie();
 });
 
-onMounted(() => {
+onBeforeMount(() => {
   loadMovie();
 });
 </script>
 
 <template>
   <main class="main">
-    <TheHero v-if="movie" :movie="movie" :isCard="true" :key="movie.id" />
-    <section class="descr">
+    <div class="loader grid" v-if="!isLoaded">
+      <TheSpinner class="big" />
+    </div>
+    <TheHero
+      v-else-if="isLoaded && movie"
+      :movie="movie"
+      :isCard="true"
+      :key="movie.id"
+    />
+    <div class="loader grid" v-if="!isLoaded">
+      <TheSpinner class="big" />
+    </div>
+    <section v-else-if="isLoaded && movie" class="descr">
       <h2 class="descr__title section-title">О фильме</h2>
       <ul class="descr__list list-reset flex">
         <li class="descr__item flex">
@@ -56,9 +71,7 @@ onMounted(() => {
           <div class="descr__value">
             {{
               movie?.budget
-                ? new Intl.NumberFormat('ru-RU').format(
-                    parseInt(movie.budget),
-                  ) + ' руб.'
+                ? new Intl.NumberFormat('ru-RU').format(+movie.budget) + ' руб.'
                 : 'Нет информации'
             }}
           </div>
@@ -71,9 +84,8 @@ onMounted(() => {
           <div class="descr__value">
             {{
               movie?.revenue
-                ? new Intl.NumberFormat('ru-RU').format(
-                    parseInt(movie.revenue),
-                  ) + ' руб.'
+                ? new Intl.NumberFormat('ru-RU').format(+movie.revenue) +
+                  ' руб.'
                 : 'Нет информации'
             }}
           </div>
@@ -111,6 +123,12 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
+.loader {
+  width: 100%;
+  min-height: 300px;
+  align-items: center;
+  justify-content: center;
+}
 .descr {
   padding: 32px 20px;
 
@@ -173,6 +191,10 @@ onMounted(() => {
 }
 
 @media (min-width: 1024px) {
+  .loader {
+    min-height: 500px;
+  }
+
   .descr {
     padding: 40px 0 0;
 

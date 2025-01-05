@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import TheImage from './TheImage.vue';
-import IconStar from './icons/IconStar.vue';
-import TheButton from './TheButton.vue';
+import TheImage from '@/components/ui-components/TheImage.vue';
+import IconStar from '@/components/icons/IconStar.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { convertToHours } from '@/utils/convertTime';
 import { convertGenres } from '@/utils/convertGenres';
-import type { TGenreForSpan, TMovie } from '@/types/movie';
 import { isDesktop } from '@/singltons/isDesktop';
+import type { TGenreForSpan, TMovie } from '@/types/movie';
 
 const props = defineProps<{
   movie: TMovie;

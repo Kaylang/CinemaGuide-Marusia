@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import AppModal from './AppModal.vue';
+import AppModal from '@/components/modal/AppModal.vue';
 import { useModalStore } from '@/stores/modal';
 
 const modalStore = useModalStore();

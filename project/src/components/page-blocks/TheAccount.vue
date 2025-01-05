@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import IconEmail from './icons/IconEmail.vue';
-import TheButton from './TheButton.vue';
+import IconEmail from '@/components/icons/IconEmail.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
 import { useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { logoutUser } from '@/api/user';
+import { unsetUserLogged } from '@/utils/controlUserLS';
 
 const user = useUserStore();
 const router = useRouter();
@@ -15,6 +16,7 @@ const initials =
 const onLogout = async () => {
   const response = await logoutUser();
   if (response.status) {
+    unsetUserLogged();
     user.clearUserData();
     router.push('/');
   }

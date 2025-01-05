@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import IconOk from './icons/IconOk.vue';
-import IconTelegram from './icons/IconTelegram.vue';
-import IconVk from './icons/IconVk.vue';
-import IconYoutube from './icons/IconYoutube.vue';
+import IconOk from '@/components/icons/IconOk.vue';
+import IconTelegram from '@/components/icons/IconTelegram.vue';
+import IconVk from '@/components/icons/IconVk.vue';
+import IconYoutube from '@/components/icons/IconYoutube.vue';
 </script>
 
 <template>

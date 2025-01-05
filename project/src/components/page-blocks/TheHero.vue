@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import TheButton from './TheButton.vue';
-import IconStar from './icons/IconStar.vue';
-import IconFavorite from './icons/iconFavorite.vue';
-import IconRenew from './icons/IconRenew.vue';
-import IconFavoriteColored from './icons/iconFavoriteColored.vue';
-import TheImage from './TheImage.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
+import IconStar from '@/components/icons/IconStar.vue';
+import IconFavorite from '@/components/icons/iconFavorite.vue';
+import IconRenew from '@/components/icons/IconRenew.vue';
+import IconFavoriteColored from '@/components/icons/iconFavoriteColored.vue';
+import TheImage from '@/components/ui-components/TheImage.vue';
 import { onMounted, ref, watch } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
@@ -34,6 +34,14 @@ const isFavorites = ref<boolean>(false);
 const genres = ref<Array<TGenreForSpan>>([]);
 const isImageLoadingError = ref<boolean>(false);
 
+const checkFavorite = () => {
+  if (randomMovie.value) {
+    isFavorites.value = userStore
+      .getFavorites()
+      .includes(randomMovie.value.id.toString());
+  }
+};
+
 const handleFavoriteBtnClick = async () => {
   if (!userStore.isAuthorized) {
     modalStore.setModalType('authorization');
@@ -50,14 +58,6 @@ const handleFavoriteBtnClick = async () => {
   }
 };
 
-const checkFavorite = () => {
-  if (randomMovie.value) {
-    isFavorites.value = userStore
-      .getFavorites()
-      .includes(randomMovie.value.id.toString());
-  }
-};
-
 const handlerRandomMovieBtnClick = async () => {
   randomMovie.value = await getOneMovie('random');
   checkFavorite();
@@ -70,13 +70,11 @@ const handlerAboutMovieBtnClick = () => {
 };
 
 const handlerTrailerBtnClick = () => {
-  if (randomMovie.value) {
+  if (randomMovie.value && randomMovie.value.trailerYouTubeId) {
     trailerStore.setMovieTitle(randomMovie.value.title);
-    if (randomMovie.value.trailerYouTubeId) {
-      trailerStore.setMovieTrailerId(randomMovie.value.trailerYouTubeId);
-      modalStore.setModalType('trailer');
-      modalStore.setModalState(true);
-    }
+    trailerStore.setMovieTrailerId(randomMovie.value.trailerYouTubeId);
+    modalStore.setModalType('trailer');
+    modalStore.setModalState(true);
   }
 };
 

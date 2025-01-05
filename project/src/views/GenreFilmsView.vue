@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import PosterCard from '@/components/PosterCard.vue';
-import TheButton from '@/components/TheButton.vue';
+import PosterCard from '@/components/page-blocks/PosterCard.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
 import { getMovies } from '@/api/movies';
 import { EGenres } from '@/enums/genres';
 import { onMounted, ref } from 'vue';

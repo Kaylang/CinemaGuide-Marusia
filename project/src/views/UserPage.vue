@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import IconFavorite from '@/components/icons/iconFavorite.vue';
 import IconUser from '@/components/icons/IconUser.vue';
-import TheAccount from '@/components/TheAccount.vue';
-import TheButton from '@/components/TheButton.vue';
-import MoviesList from '@/components/MoviesList.vue';
+import TheAccount from '@/components/page-blocks/TheAccount.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
+import MoviesList from '@/components/page-blocks/MoviesList.vue';
 import { onMounted, ref, watch } from 'vue';
 import { getFavorites } from '@/api/favorites';
 import { isDesktop } from '@/singltons/isDesktop';

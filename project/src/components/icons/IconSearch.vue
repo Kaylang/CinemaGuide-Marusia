@@ -1,6 +1,6 @@
 <template>
   <svg
-    class="search__icon"
+    class="search__icon icon-search"
     width="21"
     height="21"
     viewBox="0 0 21 21"

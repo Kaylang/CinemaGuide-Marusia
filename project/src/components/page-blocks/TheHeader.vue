@@ -1,11 +1,11 @@
 <script lang="ts" setup>
+import TheButton from '@/components/ui-components/TheButton.vue';
+import IconGenres from '@/components/icons/IconGenres.vue';
+import TheSearch from '@/components/modal/search/TheSearch.vue';
+import IconUser from '@/components/icons/IconUser.vue';
 import { RouterLink } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { isDesktop } from '@/singltons/isDesktop';
-import TheButton from './TheButton.vue';
-import IconGenres from './icons/IconGenres.vue';
-import TheSearch from './TheSearch.vue';
-import IconUser from './icons/IconUser.vue';
 import { useModalStore } from '@/stores/modal';
 
 const userStore = useUserStore();

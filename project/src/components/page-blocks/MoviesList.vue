@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import PosterCard from '@/components/page-blocks/PosterCard.vue';
 import type { TCard } from '@/types/movie';
-import PosterCard from './PosterCard.vue';
 
 const { movieCards } = defineProps<{
   movieCards: TCard[];

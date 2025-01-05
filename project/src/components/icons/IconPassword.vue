@@ -1,5 +1,6 @@
 <template>
   <svg
+    class="icon-password"
     width="24"
     height="25"
     viewBox="0 0 24 25"

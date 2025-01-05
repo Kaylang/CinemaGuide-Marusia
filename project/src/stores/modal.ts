@@ -4,7 +4,7 @@ import type { TModalType } from "@/types/modal";
 
 export const useModalStore = defineStore('modal', () => {
   const isModalOpen = ref<boolean>(false);
-  const modalType = ref<TModalType>();
+  const modalType = ref<TModalType>('authorization');
 
   const getModalState = () => {
     return isModalOpen.value;

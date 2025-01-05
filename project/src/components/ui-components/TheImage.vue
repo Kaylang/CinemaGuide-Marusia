@@ -1,6 +1,6 @@
 <script lang="ts" setup>
+import TheSpinner from '@/components/TheSpinner.vue';
 import { ref } from 'vue';
-import TheSpinner from './TheSpinner.vue';
 
 const {} = defineProps<{
   srcString?: string;
@@ -57,6 +57,7 @@ const onError = () => {
       :class="classes"
       :src="srcString"
       :alt="altString"
+      :title="altString"
       @load="onLoad"
       @error="onError"
     />

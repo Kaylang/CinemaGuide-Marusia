@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import type { TCard } from '@/types/movie';
-import TheButton from './TheButton.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
+import TheImage from '@/components/ui-components/TheImage.vue';
 import { removeFromFavorites } from '@/api/favorites';
 import { useUserStore } from '@/stores/user';
-import TheImage from './TheImage.vue';
+import type { TCard } from '@/types/movie';
 
 defineProps<{
   movie: TCard;

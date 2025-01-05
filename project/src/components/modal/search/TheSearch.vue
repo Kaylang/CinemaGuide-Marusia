@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import IconSearch from './icons/IconSearch.vue';
-import TheButton from './TheButton.vue';
+import IconSearch from '@/components/icons/IconSearch.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
 import SearchMovieCard from './SearchMovieCard.vue';
 import { onBeforeUnmount, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';

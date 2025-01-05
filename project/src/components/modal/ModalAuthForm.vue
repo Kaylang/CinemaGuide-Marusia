@@ -1,14 +1,12 @@
 <script lang="ts" setup>
+import AuthFormField from '@/components/modal/AuthFormField.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
 import { ref, watch } from 'vue';
-import AuthFormField from './AuthFormField.vue';
-import TheButton from './TheButton.vue';
-import { useAuthFormStore } from '@/stores/authForm';
+import { useFormFields } from '@/composables/useFormFields';
+import { useValidateForm } from '@/composables/useValidateForm';
 import type { TFormField } from '@/types/form';
 
-const {} = defineProps({
-  isFormOpen: {
-    type: Boolean,
-  },
+const props = defineProps({
   title: {
     type: String,
     default: '',
@@ -19,23 +17,28 @@ const {} = defineProps({
   changeAuthText: {
     type: String,
   },
+  isLogin: {
+    type: Boolean,
+  },
 });
 
 const emit = defineEmits(['update:isLogin', 'submit:submitForm']);
-
-const authFormStore = useAuthFormStore();
+const isFormValid = ref<boolean>(false);
 
 const fields = ref<TFormField[]>([]);
-fields.value = authFormStore.getFormFields();
-const fieldset = ref<HTMLFieldSetElement | null>();
+fields.value = useFormFields(props.isLogin);
 
-const onChangeAuthClick = () => {
-  authFormStore.setLoginState(!authFormStore.getLoginState());
-  emit('update:isLogin', authFormStore.getLoginState());
+const validateForm = () => {
+  isFormValid.value = useValidateForm(fields.value);
 };
 
-watch(authFormStore.getLoginState, () => {
-  fields.value = authFormStore.getFormFields();
+const onChangeAuthClick = () => {
+  isFormValid.value = false;
+  emit('update:isLogin', !props.isLogin);
+};
+
+watch(props, () => {
+  fields.value = useFormFields(props.isLogin);
 });
 </script>
 
@@ -54,7 +57,7 @@ watch(authFormStore.getLoginState, () => {
         class="auth__form form flex"
         @submit.prevent="emit('submit:submitForm', fields)"
       >
-        <fieldset class="form__fieldset flex" ref="fieldset">
+        <fieldset class="form__fieldset flex">
           <TransitionGroup name="scale" appear>
             <template v-for="field in fields" :key="field.name">
               <AuthFormField
@@ -77,9 +80,9 @@ watch(authFormStore.getLoginState, () => {
                   :placeholder="field.placeholder"
                   @focusout="
                     field.isTouched = true;
-                    authFormStore.validateForm(fields);
+                    validateForm();
                   "
-                  @input="authFormStore.validateForm(fields)"
+                  @input="validateForm()"
                 />
               </AuthFormField>
             </template>
@@ -88,7 +91,7 @@ watch(authFormStore.getLoginState, () => {
         <TheButton
           :btnClasses="'btn-primary btn-w-100'"
           :btnType="'submit'"
-          :disabled="!authFormStore.getIsFormValid()"
+          :disabled="!isFormValid"
         >
           {{ submitText }}
         </TheButton>

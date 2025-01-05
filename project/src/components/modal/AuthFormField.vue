@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import IconEmail from './icons/IconEmail.vue';
-import IconUser from './icons/IconUser.vue';
-import IconPassword from './icons/IconPassword.vue';
+import IconEmail from '@/components/icons/IconEmail.vue';
+import IconUser from '@/components/icons/IconUser.vue';
+import IconPassword from '@/components/icons/IconPassword.vue';
 
 const {} = defineProps<{
   name: string;

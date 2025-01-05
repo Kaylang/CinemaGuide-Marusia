@@ -1,13 +1,9 @@
 <script lang="ts" setup>
-import TheButton from './TheButton.vue';
+import TheButton from '@/components/ui-components/TheButton.vue';
 
 const emit = defineEmits(['update:closeModalInfo']);
 
 const { title, description, btnText } = defineProps({
-  type: {
-    type: String,
-  },
-
   title: {
     type: String,
     default: 'Регистрация завершена',
