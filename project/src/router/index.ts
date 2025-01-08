@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '@/views/HomeView.vue';
+import { useUserStore } from '@/stores/user';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,14 @@ const router = createRouter({
       component: () => import('../views/UserPage.vue'),
       meta: {
         requiredAuth: true,
+      },
+      beforeEnter: (to, from, next) => {
+        const userStore = useUserStore();
+        if (!userStore.isAuthorized) {
+          next('/');
+        } else {
+          next();
+        }
       }
     },
     {
