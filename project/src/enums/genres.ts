@@ -1,0 +1,23 @@
+
+export enum EGenres {
+  'action' = 'боевик',
+  'adventure' = 'приключения',
+  'animation' = 'мультфильм',
+  'comedy' = 'комедия',
+  'crime' = 'криминал',
+  'documentary' = 'документальный',
+  'drama' = 'драма',
+  'family' = 'семейный',
+  'fantasy' = 'фэнтези',
+  'history' = 'исторический',
+  'horror' = 'ужасы',
+  'music' = 'музыкальный',
+  'mystery' = 'мистика',
+  'romance' = 'романтика',
+  'scifi' = 'фантастика',
+  'stand-up' = 'стенд-ап',
+  'thriller' = 'триллер',
+  'tv-movie' = 'телефильм',
+  'war' = 'военный',
+  'western' = 'вестерн',
+}
