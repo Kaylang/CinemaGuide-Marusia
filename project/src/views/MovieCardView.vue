@@ -180,9 +180,9 @@ onBeforeMount(() => {
 
   .bottom {
     flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
-    column-gap: 16px;
+    // flex-wrap: nowrap;
+    // justify-content: flex-start;
+    column-gap: 14px;
 
     &-top {
       max-width: 251px;
